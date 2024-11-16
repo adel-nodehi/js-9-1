@@ -90,15 +90,16 @@ const getAdvice = async function (adviceId) {
       throw new Error(`invalid id: ${adviceId}`);
     }
 
-    createCard(data);
+    return data;
   } catch (err) {
     // console.error(`💣💣💣 Something goes wrong: ${err.message}`);
     showError(err.message);
   }
 };
 
-getAdvice(18000);
+// getAdvice(15).then((advice) => console.log(advice));
 
-getAdvice(15);
-
-// btnGetAdvice.addEventListener("click", getAdvice);
+(async function () {
+  const advice = await getAdvice(15);
+  console.log(advice);
+})();
