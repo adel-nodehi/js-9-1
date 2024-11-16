@@ -16,20 +16,28 @@ setTimeout(function () {
 
 // creating Promise
 
-new Promise((resolve, reject) => {
-  setTimeout(function () {
-    resolve();
-  }, 1000);
-})
+const wait = function (second = 1) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, second * 1000);
+  });
+};
+
+wait()
   .then(function () {
     console.log("1 second passed");
 
-    return new Promise((resolve, reject) => {
-      setTimeout(function () {
-        resolve();
-      }, 1000);
-    });
+    return wait(2);
   })
   .then(function () {
     console.log("2 second passed");
+
+    return wait();
+  })
+  .then(function () {
+    console.log("3 second passed");
+
+    return wait();
+  })
+  .then(function () {
+    console.log("4 second passed");
   });
