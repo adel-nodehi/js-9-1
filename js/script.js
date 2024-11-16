@@ -41,8 +41,8 @@ const showError = function (errorMessage) {
 };
 
 const wait = function (second = 1) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, second * 1000);
+  return new Promise((resolve, reject) => {
+    setTimeout(reject, second * 1000);
   });
 };
 
@@ -78,6 +78,7 @@ wait()
 
 // https://api.adviceslip.com/advice/{slip_id}
 
+/*
 const getAdvice = async function (adviceId) {
   try {
     const response = await fetch(
@@ -102,4 +103,49 @@ const getAdvice = async function (adviceId) {
 (async function () {
   const advice = await getAdvice(15);
   console.log(advice);
+})();
+*/
+
+const getAdvice = async function (adviceId) {
+  try {
+    const response = await fetch(
+      `	https://api.adviceslip.com/advice/${adviceId}`
+    );
+
+    const data = await response.json();
+
+    if (data.message?.type === "error") {
+      throw new Error(`invalid id: ${adviceId}`);
+    }
+
+    return data;
+  } catch (err) {
+    showError(err.message);
+  }
+};
+
+/* 
+Promise.all => 'fulfilled' => all promises fulfilled
+Promise.race => fulfilled when first Promise settled
+Promise.allSettled => fulfilled when all Promise settled
+Promise.any => fulfilled when first promise fulfilled
+*/
+(async function () {
+  //   const response = await Promise.allSettled([
+  //     fetch("https://api.quotable.io/quotes/D_S3tmLBb8"),
+  //     wait(2),
+  //   ]);
+
+  //   const response = await Promise.all([
+  //     fetch("https://api.quotable.io/quotes/D_S3tmLBb8"),
+  //     wait(2),
+  //   ]);
+
+  const response = await Promise.any([
+    fetch("https://api.quotable.io/quotes/D_S3tmLBb8"),
+    wait(0),
+  ]);
+
+  console.log(response);
+  if (!response) console.log("request took too long");
 })();
