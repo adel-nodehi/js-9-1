@@ -20,6 +20,16 @@ new Promise((resolve, reject) => {
   setTimeout(function () {
     resolve();
   }, 1000);
-}).then(function () {
-  console.log("1 second passed");
-});
+})
+  .then(function () {
+    console.log("1 second passed");
+
+    return new Promise((resolve, reject) => {
+      setTimeout(function () {
+        resolve();
+      }, 1000);
+    });
+  })
+  .then(function () {
+    console.log("2 second passed");
+  });
